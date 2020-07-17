@@ -1,8 +1,8 @@
 # curtain_automation
 
 ## 2020-07-17
-home assistnat configured
-google assistant configured and working
+home assistnat configured\n
+google assistant configured and working\n
 lwt still not done....
 
 
