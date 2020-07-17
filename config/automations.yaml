@@ -1,0 +1,34 @@
+  /config/automations.yaml
+  ########################
+  - alias: "curtain slider automation"
+    trigger:
+      platform: state
+      entity_id: input_number.slider1
+    action:
+      service: mqtt.publish
+      data_template:
+        topic: "home-assistant/cover/set_position"
+        payload_template: "{{ states('input_number.slider1') | int }}"
+        qos: 2
+        retain: true
+
+  - alias: "curtain_down boolean"
+    trigger:
+      platform: state
+      entity_id: input_boolean.cover_boolean
+      to: "on"
+    action:
+      service: input_number.set_value
+      data:
+        entity_id: input_number.slider1
+        value: 28
+  - alias: "curtain_up boolean"
+    trigger:
+      platform: state
+      entity_id: input_boolean.cover_boolean
+      to: "on"
+    action:
+      service: input_number.set_value
+      data:
+        entity_id: input_number.slider1
+        value: 0
