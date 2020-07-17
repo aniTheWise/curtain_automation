@@ -1,0 +1,106 @@
+/config/configuration.yaml
+##########################
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+http:
+  base_url: "http://aniofthehass.duckdns.org"
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+  ip_ban_enabled: true
+  login_attempts_threshold: 10
+
+cover:
+  - platform: mqtt
+    name: "office_window"
+    device_class: "shade"
+    retain: false
+    qos: 0
+    availability_topic: "home-assistant/cover/availability"
+    payload_available: "online"
+    payload_not_available: "offline"
+    command_topic: "home-assistant/cover/set"
+    payload_close: "curtain_down"
+    payload_open: "curtain_up"
+    payload_stop: "curtain_stop"
+    position_topic: "home-assistant/cover/set_position"
+    position_open: 0
+    position_closed: 28
+    state_topic: "home-assistant/cover/state"
+    state_closed: "closed"
+    state_closing: "closing"
+    state_open: "open"
+    state_opening: "opening"
+    # value_template: '{{ value.x }}'
+    
+input_number:
+  slider1:
+    name: Curtain Position
+    mode: "slider"
+    initial: 0
+    min: 0
+    max: 28
+    step: 1
+  box1:
+    name: Numeric Input Box
+    initial: 30
+    min: -20
+    max: 35
+    step: 1
+    mode: box
+    
+input_select:
+  cover_set:
+    name: Cover Position
+    options:
+      - 0
+      - 5
+      - 15
+      - 28
+    initial: 0
+    icon: mdi:panda
+    
+input_boolean:
+  cover_boolean:
+    name: Cover Boolean
+    initial: false
+    icon: mdi:window-shutter
+#   icon: mdi:WindowShutter
+    
+google_assistant:
+  project_id: hassio-49f8f
+  service_account: !include hassio-49f8f.json
+  report_state: true
+  exposed_domains:
+    - switch
+    - light
+    - cover
+    - sensor
+    - input_select
+    - input_number
+    - input_boolean
+  expose_by_default: true
+  entity_config:
+    input_select.cover_set:
+      name: "Input Select Cover"
+    input_boolean.cover_boolean:
+      name: "Input boolean Cover"
+      expose: true
+    input_number.slider1:
+      name: "Input Number Cover"
+      expose: true
+    cover.office_window:
+      name: "Toggle Cover"
+      expose: true
+    sensor.lm_g710_battery_level:
+      name: "Phone Battery Level"
+      expose: true
