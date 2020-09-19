@@ -70,7 +70,6 @@ void setup() {
 }
 void loop() {
   if (SSerial.available()) {
-    Serial.print("[!]: ");
     sserial_input = SSerial.readString();
     Serial.println(sserial_input);
 
